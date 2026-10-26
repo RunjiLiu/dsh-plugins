@@ -1,0 +1,3 @@
+- insert:
+    - id: composer-rich-input
+      name: '@local/dsh-composer-rich-input'
