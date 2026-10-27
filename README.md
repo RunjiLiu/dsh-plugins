@@ -16,7 +16,7 @@ A bundle in a subdirectory installs with the package path appended to the Git
 spec:
 
 ```
-git+https://github.com/<owner>/dsh-plugins.git#<commit>&path:/packages/composer-lists
+git+https://github.com/RunjiLiu/dsh-plugins.git#<commit>&path:/packages/composer-lists
 ```
 
 Use the same form in **Plugins → Add plugin**, or point `plugin_manager`'s
@@ -26,7 +26,7 @@ pnpm may serve a cached copy.
 ## Install from a local checkout
 
 ```bash
-git clone https://github.com/<owner>/dsh-plugins.git ~/dsh-plugins
+git clone https://github.com/RunjiLiu/dsh-plugins.git ~/dsh-plugins
 ```
 
 Then install the package **directory** (a `link:` dependency, so later
