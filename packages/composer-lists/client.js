@@ -27,7 +27,7 @@ window.__ModuleLoader__.load({
 
     const EDITOR_SELECTOR = '[data-composer-input]';
     const OBSERVER_KEY = '__dshComposerRichInputObserver';
-    const BUILD = 'v1.1.0';
+    const BUILD = 'v1.2.0';
     /** `1. `, `12) `, `- `, `* `, `+ `, `• ` with optional leading whitespace. */
     const MARKER_RE = /^([ \t]*)(?:(\d+)([.)])|([-*+•]))([ \t]+)(.*)$/;
     const INDENT = '  ';
@@ -233,8 +233,8 @@ window.__ModuleLoader__.load({
           },
         },
         zh
-          ? `${BUILD} 已加载：Shift+Enter 续列表 · Tab/Shift+Tab 缩进 · Ctrl+E（或 Ctrl+Shift+E）行尾`
-          : `${BUILD} ready: Shift+Enter continues a list · Tab/Shift+Tab indents · Ctrl+E / Ctrl+Shift+E line end`,
+          ? `${BUILD} 已加载：Shift+Enter 续列表 · Tab/Shift+Tab 缩进当前行 · Ctrl+E（或 Ctrl+Shift+E）行尾`
+          : `${BUILD} ready: Shift+Enter continues a list · Tab/Shift+Tab indents the line · Ctrl+E / Ctrl+Shift+E line end`,
       );
     }
 
@@ -302,7 +302,9 @@ window.__ModuleLoader__.load({
             event.stopPropagation();
             try {
               moveToLineEnd(root);
+              diag.ctrlE = 'moved';
             } catch {
+              diag.ctrlE = 'error';
               /* Keeping the current caret is safer than a half-applied move. */
             }
             return;
@@ -310,22 +312,41 @@ window.__ModuleLoader__.load({
 
           if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey && !event.altKey) {
             // The trigger menu arbitrates Tab itself while it is open.
-            if (document.querySelector('[data-trigger-menu]') !== null) return;
+            if (document.querySelector('[data-trigger-menu]') !== null) {
+              diag.tab = 'menu';
+              return;
+            }
             const tabState = live.current.input;
             const tabActions = live.current.actions;
             if (tabState === null || tabState === undefined || tabActions === null || tabActions === undefined) return;
             if (typeof tabActions.captureInsertion !== 'function' || typeof tabActions.setDraft !== 'function') return;
-            if (tabState.phase !== 'plain') return;
-            if (Array.isArray(tabState.occurrences) && tabState.occurrences.length > 0) return;
+            if (tabState.phase !== 'plain') {
+              diag.tab = 'phase';
+              return;
+            }
+            if (Array.isArray(tabState.occurrences) && tabState.occurrences.length > 0) {
+              diag.tab = 'chips';
+              return;
+            }
             const tabDraft = readDraft(root);
-            if (tabDraft === '') return;
+            if (tabDraft === '') {
+              diag.tab = 'empty';
+              return;
+            }
             const tabSpan = tabActions.captureInsertion();
-            if (tabSpan === null || tabSpan === undefined || tabSpan.start !== tabSpan.end) return;
+            if (tabSpan === null || tabSpan === undefined || tabSpan.start !== tabSpan.end) {
+              diag.tab = 'span';
+              return;
+            }
             if (tabSpan.start > tabDraft.length) return;
             const lineStart = tabDraft.lastIndexOf('\n', tabSpan.start - 1) + 1;
             const lineEnd = tabDraft.indexOf('\n', lineStart);
             const line = tabDraft.slice(lineStart, lineEnd < 0 ? tabDraft.length : lineEnd);
-            if (parseMarker(line) === null) return;
+            if (line.trim() === '') {
+              diag.tab = 'blank';
+              return;
+            }
+            diag.tab = event.shiftKey ? 'outdent' : 'indent';
             event.preventDefault();
             event.stopPropagation();
             const tail = lineEnd < 0 ? '' : tabDraft.slice(lineEnd);

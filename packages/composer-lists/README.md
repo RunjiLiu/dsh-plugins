@@ -8,11 +8,11 @@ without replacing it.
 | --- | --- |
 | `Shift+Enter` on a line that starts with `1. `, `1) `, `- `, `* `, `+ `, `• ` | Writes the next item as its own paragraph and continues the numbering or bullet. |
 | `Shift+Enter` on an empty item (only the marker) | Removes the marker and leaves the list. |
-| `Tab` / `Shift+Tab` on a list line | Indents or outdents that line by two spaces, so nested levels line up under the parent item's text. |
+| `Tab` / `Shift+Tab` on a non-empty line | Indents or outdents that line by two spaces, so nested levels line up under the parent item's text. |
 | `Ctrl+E` | Moves the caret to the end of the current line. |
 | Typing any list marker | The paragraph gets a hanging indent, so the text after the marker and every wrapped continuation line align. |
 
-Outside a list line, `Tab` keeps its native focus traversal, and while the `/`
+`Tab` on an empty line keeps its native focus traversal, and while the `/`
 or `@` menu is open the menu keeps `Tab` for settling the highlighted row.
 
 ## Why Shift+Enter
