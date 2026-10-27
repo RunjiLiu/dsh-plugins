@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "输入框列表增强",
-    "description": "Shift+Enter 换行时自动续接数字或项目符号列表，并让续行对齐缩进；Ctrl+E 把光标跳到输入内容的末尾。"
+    "description": "输入框列表增强：Shift+Enter 续接数字或项目符号列表并对齐续行，Tab/Shift+Tab 调整列表缩进，Ctrl+E 跳到行尾。"
   }
 }

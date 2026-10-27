@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Composer Lists",
-    "description": "Continues numbered and bulleted lists on Shift+Enter with an aligned hanging indent, and jumps the caret to the end of the draft with Ctrl+E."
+    "description": "Continues numbered and bulleted lists on Shift+Enter with an aligned hanging indent, indents list lines with Tab/Shift+Tab, and moves the caret to the line end with Ctrl+E."
   }
 }
